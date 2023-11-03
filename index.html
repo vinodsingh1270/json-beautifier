@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>JSON Beautifier</title>
+      <style>
+         body {
+         font-family: Arial, sans-serif;
+         margin: 0;
+         padding: 0;
+         background-color: #f0f0f0;
+         }
+         .header {
+         background-color: #333;
+         color: #fff;
+         text-align: center;
+         padding: 0px;
+         position: fixed;
+         top: 0;
+         width: 100%;
+         }
+         .container {
+         max-width: 100%;
+         margin: 0 auto;
+         padding: 50px;
+         background-color: #fff;
+         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+         border-radius: 5px;
+         margin-top: 31px;
+         } /* To push content below the fixed header */
+         .json-output {
+         width: 100%;
+         min-height: 250px;
+         padding: 10px;
+         border: 1px solid #ccc;
+         border-radius: 5px;
+         margin-top: 10px;
+         white-space: pre-wrap;
+         }
+         .search-box {
+         margin-top: 20px;
+         }
+         .footer {
+         position: fixed;
+         bottom: 0;
+         right: 0;
+         background-color: #333;
+         color: #fff;
+         padding: 10px;
+         width: 100%;
+         text-align: right;
+         }
+         .highlighted {
+         background-color: yellow;
+         font-weight: bold;
+         }
+         /* Add these styles to your existing CSS */
+         .button {
+         padding: 5px 12px;
+         font-size: 16px;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         margin: 0px 0px 7px 0px;
+         transition: background-color 0.3s;
+         }
+         .primary-button {
+         background-color: #0074d9;
+         color: #fff;
+         }
+         .secondary-button {
+         background-color: #ccc;
+         color: #000;
+         }
+         .success-button {
+         background-color: #2ecc40;
+         color: #fff;
+         }
+         .button:hover {
+         background-color: #0056a4;
+         }
+         .json-input {
+         width: 100%;
+         height: 600px;
+         padding: 10px;
+         font-family: monospace;
+         border: 1px solid #ccc;
+         border-radius: 5px;
+         font-size: 14px;
+         }
+         .json-input:focus {
+         border-color: #0074d9; /* Change the border color when the input is focused */
+         outline: none; /* Remove the default outline on focus */
+         box-shadow: 0 0 5px rgba(0, 116, 217, 0.5); /* Add a subtle shadow when focused */
+         }
+         .json-input::placeholder {
+         color: #888; /* Customize the placeholder text color */
+         }
+
+		 .input-container {
+            display: inline-block;
+            margin-right: 10px; /* Add some spacing between the inputs */
+        }
+		.error{
+			color:red;
+		}
+      </style>
+   </head>
+   <body>
+      <div class="header">
+         <h3>JSON Beautifier</h3>
+      </div>
+      <div class="container">
+         <button onclick="pasteJson()" class="button secondary-button">Paste</button>
+		 <button onclick="beautifyJson()" class="button primary-button">Beautify JSON</button>
+		 <button onclick="clearInput()" class="button secondary-button">Clear</button>
+
+    <div class="input-container">
+		<span id="error-msg" class="error match-count"></span>
+    </div>
+	
+         <textarea id="json-input" class="json-input" placeholder="Paste or Enter your JSON here..."></textarea>
+         <!-- <div class="json-output" id="json-output"></div> --> 
+      </div>
+      <div class="footer">
+         &copy; 2023 Developed By Vinod Singh
+      </div>
+      <script>
+	  
+	  	document.getElementById("json-input").setAttribute("spellcheck", "false");
+		const errorMsg = document.getElementById('error-msg');
+         function beautifyJson() {
+         const inputJson = document.getElementById('json-input').value;
+
+         //console.log("inputJson : ", inputJson);
+         try {
+         errorMsg.textContent = "";
+         const updatedInputJson = inputJson.replace(/'/g, '"');
+		 //console.log(updatedInputJson);
+         const jsonObject = JSON.parse(updatedInputJson);
+
+		 document.getElementById('json-input').value = JSON.stringify(jsonObject, null, 2);
+		 
+         } catch (error) {
+		 console.log(error)
+		 errorMsg.textContent = 'Invalid JSON';
+         }
+         }
+         function clearInput() {
+             const inputField = document.getElementById('json-input');
+             inputField.value = '';
+			 errorMsg.textContent = "";
+         }
+         
+         function pasteJson() {
+         const inputField = document.getElementById('json-input');
+         navigator.clipboard.readText().then((clipboardText) => {
+         inputField.value = clipboardText;
+         }).catch((error) => {
+         console.error('Failed to read clipboard text: ', error);
+         });
+         }
+         
+      </script>
+   </body>
+</html>
